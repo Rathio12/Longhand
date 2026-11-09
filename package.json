@@ -1,0 +1,84 @@
+{
+  "name": "longhand",
+  "productName": "Longhand",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline coding practice for exams where AI tools are banned.",
+  "author": "neon.real",
+  "license": "MIT",
+  "main": "electron/main.cjs",
+  "overrides": {
+    "dompurify": "^3.4.17"
+  },
+  "scripts": {
+    "dev": "concurrently -k -n vite,app \"vite\" \"wait-on tcp:5173 && electron . --dev\"",
+    "build": "vite build",
+    "start": "vite build && electron .",
+    "runtimes": "node scripts/fetch-runtimes.mjs",
+    "dist": "npm run runtimes && vite build && electron-builder --win --publish never"
+  },
+  "build": {
+    "appId": "io.github.longhand.app",
+    "productName": "Longhand",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**",
+      "electron/**",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "runtimes",
+        "to": "runtimes",
+        "filter": [
+          "**/*",
+          "!*.installed"
+        ]
+      },
+      {
+        "from": "THIRD-PARTY.md",
+        "to": "THIRD-PARTY.md"
+      }
+    ],
+    "publish": {
+      "provider": "generic",
+      "url": "https://github.com/"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "electron/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "Longhand-Setup-${version}.${ext}"
+    }
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.11"
+  },
+  "devDependencies": {
+    "7zip-bin": "^5.2.0",
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@monaco-editor/react": "^4.7.0",
+    "@tailwindcss/vite": "^4.3.5",
+    "@vitejs/plugin-react": "^6.2.1",
+    "concurrently": "^10.0.7",
+    "electron": "^45.2.3",
+    "electron-builder": "^26.18.0",
+    "monaco-editor": "^0.57.0",
+    "monaco-vim": "^0.4.4",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
+    "tailwindcss": "^4.3.5",
+    "vite": "^8.3.6",
+    "wait-on": "^9.5.1"
+  }
+}
